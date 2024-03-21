@@ -1,0 +1,64 @@
+const Item = require("../models/Item");
+
+const asyncHandler = require("express-async-handler");
+const { body, validationResult } = require("express-validator");
+
+exports.item_list = asyncHandler(async (req, res) => {
+  const items = await Item.find(
+    { campaign_id: req.params.campaignId },
+    "name short_description"
+  ).exec();
+  res.status(200).json(items);
+});
+
+exports.item_detail_get = asyncHandler(async (req, res) => {
+  const item = await Item.findById(req.params.id).exec();
+
+  if (!item) {
+    res.status(404).json({ message: "Item not found" });
+  }
+
+  res.status(200).json(item);
+});
+
+exports.item_create_post = [
+  body("name").trim().escape().isLength({ min: 1 }),
+  body("short_description").trim().escape(),
+  body("long_description").trim().escape(),
+
+  asyncHandler(async (req, res) => {
+    const item = new Item({
+      name: req.body.name,
+      short_description: req.body.short_description,
+      long_description: req.body.long_description,
+      campaign_id: req.params.campaignId,
+    });
+
+    await item.save();
+    res.status(200).json(item);
+  }),
+];
+
+exports.item_update_post = [
+  body("name").trim().escape().isLength({ min: 1 }),
+  body("short_description").trim().escape(),
+  body("long_description").trim().escape(),
+
+  asyncHandler(async (req, res) => {
+    const item = new Item({
+      name: req.body.name,
+      short_description: req.body.short_description,
+      long_description: req.body.long_description,
+      campaign_id: req.params.campaignId,
+      _id: req.params.id,
+    });
+
+    await Item.findByIdAndUpdate(req.params.id);
+    res.status(200).json(item);
+  }),
+];
+
+exports.item_delete_post = asyncHandler(async (req, res) => {
+  Item.findByIdAndDelete(req.params.id);
+  res.status(200).json({ message: "Deleted item with id: " + req.params.id });
+});
