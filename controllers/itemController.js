@@ -22,11 +22,25 @@ exports.item_detail_get = asyncHandler(async (req, res) => {
 });
 
 exports.item_create_post = [
-  body("name").trim().escape().isLength({ min: 1 }),
-  body("short_description").trim().escape(),
+  body("name")
+    .trim()
+    .escape()
+    .isLength({ min: 1, max: 50 })
+    .withMessage("Name must be defined and shorter than 50 characters."),
+  body("short_description")
+    .trim()
+    .escape()
+    .isLength({ max: 500 })
+    .withMessage("Short description must not be longer than 500 characters"),
   body("long_description").trim().escape(),
 
   asyncHandler(async (req, res) => {
+    const error = validationResult();
+
+    if (!error) {
+      res.status(400).json(error.array());
+    }
+
     const item = new Item({
       name: req.body.name,
       short_description: req.body.short_description,
@@ -45,6 +59,12 @@ exports.item_update_post = [
   body("long_description").trim().escape(),
 
   asyncHandler(async (req, res) => {
+    const error = validationResult();
+
+    if (!error) {
+      res.status(400).json(error.array());
+    }
+
     const item = new Item({
       name: req.body.name,
       short_description: req.body.short_description,
