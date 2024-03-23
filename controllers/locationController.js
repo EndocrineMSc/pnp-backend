@@ -1,4 +1,4 @@
-const Location = require("../models/Location");
+const Location = require("../models/location");
 
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");

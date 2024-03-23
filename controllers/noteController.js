@@ -1,4 +1,4 @@
-const Note = require("../models/Note");
+const Note = require("../models/note");
 
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");

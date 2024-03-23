@@ -2,7 +2,7 @@ const Campaign = require("../models/campaign");
 const User = require("../models/user");
 const Character = require("../models/character");
 const Item = require("../models/item");
-const Location = require("../models/loaction");
+const Location = require("../models/location");
 const mongoose = require("mongoose");
 
 const asyncHandler = require("express-async-handler");
