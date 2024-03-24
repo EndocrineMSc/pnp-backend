@@ -8,9 +8,13 @@ exports.verifyToken = asyncHandler(async (req, res, next) => {
   const token = bearerHeader && bearerHeader.split(" ")[1];
   if (token == null) return res.sendStatus(403);
 
-  jwt.verify(token, "secretkey", (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    next();
-  });
+  jwt.verify(
+    token,
+    "GUC5npe&J&SFbT5nL4@ZpW!fzGpKxR%hM@R7vT6qi^6n5$ELz^VpHWRe",
+    (err, user) => {
+      if (err) return res.sendStatus(403);
+      req.user = user;
+      next();
+    }
+  );
 });

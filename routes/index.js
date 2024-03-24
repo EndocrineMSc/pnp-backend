@@ -8,7 +8,9 @@ const item_controller = require("../controllers/itemController");
 const location_controller = require("../controllers/locationController");
 const note_controller = require("../controllers/noteController");
 const login_controller = require("../controllers/loginController");
+const logout_controller = require("../controllers/logoutController");
 const register_controller = require("../controllers/registerController");
+const token_controller = require("../controllers/tokenRefreshController");
 
 const { verifyToken } = require("../verifyToken");
 
@@ -17,7 +19,9 @@ router.post(
   passport.authenticate("local"),
   login_controller.login_user
 );
+router.post("/api/v1/token", token_controller.refresh_token);
 router.post("/api/v1/signup", register_controller.signup_user);
+router.post("/api/v1/logout", logout_controller.log_out);
 
 // #region Campaign URIs
 router.get(
