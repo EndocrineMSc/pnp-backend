@@ -35,7 +35,7 @@ exports.item_create_post = [
   body("long_description").trim().escape(),
 
   asyncHandler(async (req, res) => {
-    const error = validationResult();
+    const error = validationResult(req);
 
     if (!error) {
       res.status(400).json(error.array());
@@ -59,7 +59,7 @@ exports.item_update_post = [
   body("long_description").trim().escape(),
 
   asyncHandler(async (req, res) => {
-    const error = validationResult();
+    const error = validationResult(req);
 
     if (!error) {
       res.status(400).json(error.array());

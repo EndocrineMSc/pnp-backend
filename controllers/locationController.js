@@ -35,7 +35,7 @@ exports.location_create_post = [
   body("long_description").trim().escape(),
 
   asyncHandler(async (req, res) => {
-    const error = validationResult();
+    const error = validationResult(req);
 
     if (!error.isEmpty()) {
       res.status(400).json(error.array());
@@ -67,7 +67,7 @@ exports.location_update_post = [
   body("long_description").trim().escape(),
 
   asyncHandler(async (req, res) => {
-    const error = validationResult();
+    const error = validationResult(req);
 
     if (!error.isEmpty()) {
       res.status(400).json(error.array());

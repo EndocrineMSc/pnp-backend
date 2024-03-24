@@ -32,7 +32,7 @@ exports.note_create_post = [
     .withMessage("Wrong date format"),
 
   asyncHandler(async (req, res) => {
-    const error = validationResult();
+    const error = validationResult(req);
 
     if (!error.isEmpty()) {
       res.status(400).json(error.array());
@@ -61,7 +61,7 @@ exports.note_update_post = [
     .withMessage("Wrong date format"),
 
   asyncHandler(async (req, res) => {
-    const error = validationResult();
+    const error = validationResult(req);
 
     if (!error.isEmpty()) {
       res.status(400).json(error.array());
