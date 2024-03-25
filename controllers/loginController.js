@@ -7,16 +7,11 @@ exports.login_user = asyncHandler(async (req, res) => {
   const { _id, username } = req.user;
   const user = { _id, username };
 
-  const accessToken = jwt.sign(
-    user,
-    "GUC5npe&J&SFbT5nL4@ZpW!fzGpKxR%hM@R7vT6qi^6n5$ELz^VpHWRe",
-    { expiresIn: "1d" }
-  );
+  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN, {
+    expiresIn: "1d",
+  });
 
-  const refreshToken = jwt.sign(
-    user,
-    "J7b33B3BE9@n&aX#gLzWrbk$X38Q8*xv9%*ebT97Ke8U@5%WGYH4f$UP"
-  );
+  const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN);
 
   const rToken = new RefreshToken({
     refreshToken: refreshToken,

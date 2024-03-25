@@ -9,13 +9,14 @@ const passport = require("passport");
 const initializePassport = require("./passportInit");
 const session = require("express-session");
 
+const PORT = process.env.PORT || 8080;
+
 var app = express();
 
 // Set up mongoose connection
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
-const mongoDB =
-  "mongodb+srv://endocrine:e9TQceRbvjDCL1DF@cluster0.kqexf3i.mongodb.net/pnp_note_app?retryWrites=true&w=majority&appName=Cluster0";
+const mongoDB = process.env.DATABASE_URL;
 
 main().catch((err) => console.log(err));
 async function main() {
@@ -40,6 +41,6 @@ app.use("/", indexRouter);
 initializePassport(passport);
 app.use(passport.initialize());
 
-app.listen(8000);
+app.listen(PORT);
 
 module.exports = app;
