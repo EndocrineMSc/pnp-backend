@@ -1,16 +1,28 @@
 const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
+const tokenRefresh = require("./controllers/tokenRefreshController");
 
 // Verify Token
 exports.verifyToken = asyncHandler(async (req, res, next) => {
   // Get auth header value
-  const bearerHeader = req.headers["authorization"];
-  const token = bearerHeader && bearerHeader.split(" ")[1];
-  if (token == null) return res.sendStatus(403);
+  const accessHeader = req.headers["authorization"];
+  const refreshHeader = req.headers["refresh"];
+  const accessToken = accessHeader && accessHeader.split(" ")[1];
+  const refreshToken = refreshHeader && refreshHeader.split(" ")[1];
 
-  jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
-    if (err) return res.sendStatus(403);
+  if (!accessToken) return res.sendStatus(403);
+
+  jwt.verify(accessToken, process.env.ACCESS_TOKEN, (err, user) => {
+    if (err) return;
     req.user = user;
     next();
   });
+
+  if (!refreshToken) return res.sendStatus(403);
+
+  const newAccessToken = tokenRefresh.quick_refresh(refreshToken);
+
+  if (!newAccessToken) return res.sendStatus(403);
+
+  res.status(401).json(newAccessToken);
 });
