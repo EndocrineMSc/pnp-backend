@@ -1,21 +1,19 @@
-const Character = require("../models/character");
+const GameCharacter = require("../models/character");
 
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 
 exports.character_list = asyncHandler(async (req, res) => {
-  const characters = await Character.find(
-    { campaignId: req.params.campaignId },
-    "name short_description _id"
-  )
-    .sort({ name: 1 })
-    .exec();
+  const characters = await GameCharacter.find(
+    { campaign_id: req.params.campaignId },
+    "name _id"
+  ).exec();
 
   res.status(200).json(characters);
 });
 
 exports.character_detail_get = asyncHandler(async (req, res) => {
-  const character = await Character.FindById(req.params.id)
+  const character = await GameCharacter.findById(req.params.id)
     .populate("location")
     .exec();
 
@@ -45,7 +43,7 @@ exports.character_create_post = [
       res.status(403).json(errors.array());
     }
 
-    const character = new Character({
+    const character = new GameCharacter({
       name: req.body.name,
       occupation: req.body.occupation,
       location: req.body.location,
@@ -83,7 +81,7 @@ exports.character_update_post = [
       res.status(403).json(errors.array());
     }
 
-    const character = new Character({
+    const character = new GameCharacter({
       name: req.body.name,
       occupation: req.body.occupation,
       location: req.body.location,
@@ -93,7 +91,7 @@ exports.character_update_post = [
       _id: req.params.id,
     });
 
-    const updatedCharacter = await Character.findByIdAndUpdate(
+    const updatedCharacter = await GameCharacter.findByIdAndUpdate(
       req.params.id,
       character,
       {}
@@ -103,7 +101,7 @@ exports.character_update_post = [
 ];
 
 exports.character_delete_post = asyncHandler(async (req, res) => {
-  await Character.findByIdAndDelete(req.params.id);
+  await GameCharacter.findByIdAndDelete(req.params.id);
   res
     .status(200)
     .json({ message: "Deleted character with id: " + req.params.id });

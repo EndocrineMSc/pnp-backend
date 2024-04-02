@@ -1,18 +1,19 @@
-const Item = require("../models/item");
+const GameItem = require("../models/item");
 
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 
 exports.item_list = asyncHandler(async (req, res) => {
-  const items = await Item.find(
+  const items = await GameItem.find(
     { campaign_id: req.params.campaignId },
-    "name short_description"
+    "name _id"
   ).exec();
+
   res.status(200).json(items);
 });
 
 exports.item_detail_get = asyncHandler(async (req, res) => {
-  const item = await Item.findById(req.params.id).exec();
+  const item = await GameItem.findById(req.params.id).exec();
 
   if (!item) {
     res.status(404).json({ message: "Item not found" });
@@ -41,7 +42,7 @@ exports.item_create_post = [
       res.status(400).json(error.array());
     }
 
-    const item = new Item({
+    const item = new GameItem({
       name: req.body.name,
       short_description: req.body.short_description,
       long_description: req.body.long_description,
@@ -65,7 +66,7 @@ exports.item_update_post = [
       res.status(400).json(error.array());
     }
 
-    const item = new Item({
+    const item = new GameItem({
       name: req.body.name,
       short_description: req.body.short_description,
       long_description: req.body.long_description,
@@ -73,12 +74,12 @@ exports.item_update_post = [
       _id: req.params.id,
     });
 
-    await Item.findByIdAndUpdate(req.params.id);
+    await GameItem.findByIdAndUpdate(req.params.id);
     res.status(200).json(item);
   }),
 ];
 
 exports.item_delete_post = asyncHandler(async (req, res) => {
-  Item.findByIdAndDelete(req.params.id);
+  GameItem.findByIdAndDelete(req.params.id);
   res.status(200).json({ message: "Deleted item with id: " + req.params.id });
 });
