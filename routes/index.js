@@ -14,6 +14,14 @@ const token_controller = require("../controllers/tokenRefreshController");
 
 const { verifyToken } = require("../verifyToken");
 
+/*
+const originPattern = /^http:\/\/localhost:5173/;
+const corsOptions = {
+  origin: originPattern,
+  optionSuccessStatus: 200,
+};
+*/
+
 router.post(
   "/api/v1/login",
   passport.authenticate("local"),
@@ -25,22 +33,22 @@ router.post("/api/v1/logout", logout_controller.log_out);
 
 // #region Campaign URIs
 router.get(
-  "/api/v1/campaigns/:user_id",
+  "/api/v1/:user_id/campaigns",
   verifyToken,
   campaign_controller.campaign_list
 );
 router.get(
-  "/api/v1/campaigns/:id",
+  "/api/v1/campaign/:id",
   verifyToken,
   campaign_controller.campaign_detail_get
 );
 router.post(
-  "/api/v1/campaigns/:user_id/create",
+  "/api/v1/:user_id/campaign/create",
   verifyToken,
   campaign_controller.campaign_create_post
 );
 router.post(
-  "/api/v1/:campaignId/update",
+  "/api/v1/campaign/update/:campaignId",
   verifyToken,
   campaign_controller.campaign_update_post
 );
@@ -58,46 +66,46 @@ router.get(
   character_controller.character_list
 );
 router.get(
-  "/api/v1/:campaignId/characters/:id",
+  "/api/v1/character/:id",
   verifyToken,
   character_controller.character_detail_get
 );
 router.post(
-  "/api/v1/:campaignId/characters/create",
+  "/api/v1/:campaignId/character/create",
   verifyToken,
   character_controller.character_create_post
 );
 router.post(
-  "/api/v1/:campaignId/characters/:id/update",
+  "/api/v1/character/:id/update",
   verifyToken,
   character_controller.character_update_post
 );
 router.post(
-  "/api/v1/:campaignId/characaters/:id/delete",
+  "/api/v1/character/:id/delete",
   verifyToken,
   character_controller.character_delete_post
 );
 // #endregion
 
 // #region Item URIs
-router.get("/api/v1/:campaignId/items", verifyToken, item_controller.item_list);
 router.get(
-  "/api/v1/:campaignId/items/:id",
+  "/api/v1/:campaignId/objects",
   verifyToken,
-  item_controller.item_detail_get
+  item_controller.item_list
 );
+router.get("/api/v1/object/:id", verifyToken, item_controller.item_detail_get);
 router.post(
-  "/api/v1/:campaignId/items/create",
+  "/api/v1/:campaignId/object/create",
   verifyToken,
   item_controller.item_create_post
 );
 router.post(
-  "/api/v1/:campaignId/items/:id/update",
+  "/api/v1/object/:id/update",
   verifyToken,
   item_controller.item_update_post
 );
 router.post(
-  "/api/v1/:campaignId/items/:id/delete",
+  "/api/v1/object/:id/delete",
   verifyToken,
   item_controller.item_delete_post
 );
@@ -110,22 +118,22 @@ router.get(
   location_controller.location_list
 );
 router.get(
-  "/api/v1/:campaignId/locations/:id",
+  "/api/v1/location/:id",
   verifyToken,
   location_controller.location_detail_get
 );
 router.post(
-  "/api/v1/:campaignId/locations/create",
+  "/api/v1/:campaignId/location/create",
   verifyToken,
   location_controller.location_create_post
 );
 router.post(
-  "/api/v1/:campaignId/locations/:id/update",
+  "/api/v1/location/:id/update",
   verifyToken,
   location_controller.location_update_post
 );
 router.post(
-  "/api/v1/:campaignId/locations/:id/delete",
+  "/api/v1/location/:id/delete",
   verifyToken,
   location_controller.location_delete_post
 );
@@ -133,23 +141,19 @@ router.post(
 
 // #region Note URIs
 router.get("/api/v1/:campaignId/notes", verifyToken, note_controller.note_list);
-router.get(
-  "/api/v1/:campaignId/notes/:id",
-  verifyToken,
-  note_controller.note_detail_get
-);
+router.get("/api/v1/note/:id", verifyToken, note_controller.note_detail_get);
 router.post(
-  "/api/v1/:campaignId/notes/create",
+  "/api/v1/:campaignId/note/create",
   verifyToken,
   note_controller.note_create_post
 );
 router.post(
-  "/api/v1/:campaignId/notes/:id/update",
+  "/api/v1/note/:id/update",
   verifyToken,
   note_controller.note_update_post
 );
 router.post(
-  "/api/v1/:campaignId/notes/:id/delete",
+  "/api/v1/note/:id/delete",
   verifyToken,
   note_controller.note_delete_post
 );
