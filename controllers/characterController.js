@@ -50,6 +50,7 @@ exports.character_create_post = [
       location_path: req.body.location_path,
       short_description: req.body.short_description,
       long_description: req.body.long_description,
+      campaign_id: req.params.campaignId,
     });
 
     try {
@@ -88,6 +89,7 @@ exports.character_update_post = [
       location_path: req.body.location_path,
       short_description: req.body.short_description,
       long_description: req.body.long_description,
+      campaign_id: req.params.campaignId,
       _id: req.params.id,
     });
 
