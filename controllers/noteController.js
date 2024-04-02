@@ -1,12 +1,13 @@
 const Note = require("../models/note");
+const escape = require("escape-html");
 
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 
 exports.note_list = asyncHandler(async (req, res) => {
   const notes = await Note.find(
-    { campaign_id: req.body.campaignId },
-    "name date _id"
+    { campaign_id: req.params.campaignId },
+    "date _id"
   ).exec();
   res.status(200).json(notes);
 });
@@ -22,55 +23,42 @@ exports.note_detail_get = asyncHandler(async (req, res) => {
 });
 
 exports.note_create_post = [
-  body("name").trim().escape().isLength({ min: 1, max: 50 }),
-  body("date")
-    .trim()
-    .escape()
-    .optional({ values: "falsy" })
-    .isISO8601()
-    .isDate()
-    .withMessage("Wrong date format"),
+  body("date").trim().escape(),
 
   asyncHandler(async (req, res) => {
     const error = validationResult(req);
 
     if (!error.isEmpty()) {
+      console.log(error);
       res.status(400).json(error.array());
+    } else {
+      const note = new Note({
+        date: req.body.date ? req.body.date : new Date(),
+        text: req.body.text,
+        campaign_id: req.params.campaignId,
+      });
+
+      note.save();
+      res.status(200).json(note);
     }
-
-    const note = new Note({
-      name: req.body.name,
-      date: req.body.date ? req.body.date : new Date(),
-      text: req.body.text,
-      campaign_id: req.params.campaignId,
-    });
-
-    note.save();
-    res.status(200).json(note);
   }),
 ];
 
 exports.note_update_post = [
-  body("name").trim().escape().isLength({ min: 1, max: 50 }),
-  body("date")
-    .trim()
-    .escape()
-    .optional({ values: "falsy" })
-    .isISO8601()
-    .isDate()
-    .withMessage("Wrong date format"),
+  body("date").trim().escape(),
 
   asyncHandler(async (req, res) => {
     const error = validationResult(req);
+    const escapedText = escape(req.body.text);
+    console.log(escapedText);
 
     if (!error.isEmpty()) {
       res.status(400).json(error.array());
     }
 
     const note = new Note({
-      name: req.body.name,
       date: req.body.date ? req.body.date : new Date(),
-      text: req.body.text,
+      text: escapedText,
       campaign_id: req.params.campaignId,
       _id: req.params.id,
     });
