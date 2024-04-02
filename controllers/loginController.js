@@ -23,5 +23,5 @@ exports.login_user = asyncHandler(async (req, res) => {
 
   res
     .status(200)
-    .json({ accessToken: accessToken, refreshToken: refreshToken });
+    .json({ accessToken: accessToken, refreshToken: refreshToken, user: user });
 });
