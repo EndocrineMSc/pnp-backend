@@ -8,7 +8,7 @@ const CharacterSchema = new Schema({
   location_path: { type: String },
   short_description: { type: String, maxLength: 500 },
   long_description: { type: String },
-  campaign_id: { type: Schema.Types.ObjectId, ref: "Campaign" },
+  campaign_id: { type: Schema.Types.ObjectId, ref: "Campaign", required: true },
 });
 
-exports.module = mongoose.model("Character", CharacterSchema);
+module.exports = mongoose.model("GameCharacter", CharacterSchema);
