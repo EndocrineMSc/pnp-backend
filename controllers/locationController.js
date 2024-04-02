@@ -6,7 +6,7 @@ const { body, validationResult } = require("express-validator");
 exports.location_list = asyncHandler(async (req, res) => {
   const locations = await Location.find(
     { campaign_id: req.params.campaignId },
-    "name short_description"
+    "name _id"
   );
   res.status(200).json(locations);
 });
