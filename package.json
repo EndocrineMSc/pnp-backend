@@ -5,12 +5,18 @@
   "scripts": {
     "start": "node ./bin/www",
     "devstart": "nodemon ./bin/www",
-    "serverstart": "DEBUG=express-local-library:* npm run devstart"
+    "serverstart": "DEBUG=express-local-library:* npm run devstart",
+    "flyinstall": "curl -L https://fly.io/install.sh | sh",
+    "flyexport": "export FLYCTL_INSTALL=\"/home/endocrine/.fly\"",
+    "flypath": "export PATH=\"$FLYCTL_INSTALL/bin:$PATH\"",
+    "flyinit": "npm run flyinstall && npm run flyexport && npm run flypath"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
+    "escape-html": "^1.0.3",
     "express": "~4.16.1",
     "express-async-handler": "^1.2.0",
     "express-session": "^1.18.0",
