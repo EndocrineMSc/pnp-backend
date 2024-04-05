@@ -48,12 +48,12 @@ router.post(
   campaign_controller.campaign_create_post
 );
 router.post(
-  "/api/v1/campaign/update/:campaignId",
+  "/api/v1/campaign/:campaignId/update",
   verifyToken,
   campaign_controller.campaign_update_post
 );
 router.post(
-  "/api/v1/:campaignId/delete",
+  "/api/v1/campaign/:campaignId/delete",
   verifyToken,
   campaign_controller.campaign_delete_post
 );
