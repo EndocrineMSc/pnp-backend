@@ -46,7 +46,7 @@ exports.character_create_post = [
     const character = new GameCharacter({
       name: req.body.name,
       occupation: req.body.occupation,
-      location: req.body.location,
+      location: req.body.location ? req.body.location : null,
       location_path: req.body.location_path,
       short_description: req.body.short_description,
       long_description: req.body.long_description,
@@ -85,7 +85,7 @@ exports.character_update_post = [
     const character = new GameCharacter({
       name: req.body.name,
       occupation: req.body.occupation,
-      location: req.body.location,
+      location: req.body.location ? req.body.location : null,
       location_path: req.body.location_path,
       short_description: req.body.short_description,
       long_description: req.body.long_description,
