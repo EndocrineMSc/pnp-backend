@@ -80,6 +80,6 @@ exports.item_update_post = [
 ];
 
 exports.item_delete_post = asyncHandler(async (req, res) => {
-  GameItem.findByIdAndDelete(req.params.id);
+  await GameItem.findByIdAndDelete(req.params.id);
   res.status(200).json({ message: "Deleted item with id: " + req.params.id });
 });
