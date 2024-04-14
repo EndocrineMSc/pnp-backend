@@ -9,7 +9,7 @@ const { body, validationResult } = require("express-validator");
 exports.campaign_list = asyncHandler(async (req, res) => {
   const campaigns = await Campaign.find(
     { user_id: req.params.user_id },
-    "name _id"
+    "name _id image"
   )
     .sort({ name: 1 })
     .exec();

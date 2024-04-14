@@ -6,7 +6,7 @@ const { body, validationResult } = require("express-validator");
 exports.character_list = asyncHandler(async (req, res) => {
   const characters = await GameCharacter.find(
     { campaign_id: req.params.campaignId },
-    "name _id"
+    "name _id image"
   ).exec();
 
   res.status(200).json(characters);
