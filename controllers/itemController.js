@@ -47,6 +47,7 @@ exports.item_create_post = [
       short_description: req.body.short_description,
       long_description: req.body.long_description,
       campaign_id: req.params.campaignId,
+      image: req.body.image,
     });
 
     await item.save();
@@ -71,6 +72,7 @@ exports.item_update_post = [
       short_description: req.body.short_description,
       long_description: req.body.long_description,
       campaign_id: req.params.campaignId,
+      image: req.body.image,
       _id: req.params.id,
     });
 

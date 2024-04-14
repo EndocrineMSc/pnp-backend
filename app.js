@@ -12,6 +12,14 @@ const session = require("express-session");
 
 const PORT = process.env.PORT || 8080;
 
+const devOriginPattern = /^http:\/\/localhost:5173/;
+const prodOriginPattern = /^https:\/\/rpg-adventure-journal.vercel.app/;
+const corsOptions = {
+  origin: [devOriginPattern, prodOriginPattern],
+  optionSuccessStatus: 200,
+  credentials: true,
+};
+
 var app = express();
 
 // Set up mongoose connection
@@ -24,7 +32,7 @@ async function main() {
   await mongoose.connect(mongoDB);
 }
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

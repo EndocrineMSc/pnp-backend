@@ -44,6 +44,7 @@ exports.campaign_create_post = [
       name: req.body.name,
       description: req.body.description,
       user_id: req.params.user_id,
+      image: req.body.image,
     });
 
     if (!errors.isEmpty()) {
@@ -71,6 +72,7 @@ exports.campaign_update_post = [
       name: req.body.name,
       user_id: req.params.user_id,
       description: req.body.description,
+      image: req.body.image,
       _id: req.params.campaignId,
     });
 

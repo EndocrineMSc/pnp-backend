@@ -14,14 +14,6 @@ const token_controller = require("../controllers/tokenRefreshController");
 
 const { verifyToken } = require("../verifyToken");
 
-/*
-const originPattern = /^http:\/\/localhost:5173/;
-const corsOptions = {
-  origin: originPattern,
-  optionSuccessStatus: 200,
-};
-*/
-
 router.post(
   "/api/v1/login",
   passport.authenticate("local"),

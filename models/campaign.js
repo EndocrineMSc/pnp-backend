@@ -5,6 +5,7 @@ const CampaignSchema = new Schema({
   name: { type: String, required: true, maxLength: 50 },
   description: { type: String },
   user_id: { type: String, required: true },
+  image: { type: String },
 });
 
 module.exports = mongoose.model("Campaign", CampaignSchema);
