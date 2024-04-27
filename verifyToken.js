@@ -14,26 +14,32 @@ exports.verifyToken = asyncHandler(async (req, res, next) => {
 
   jwt.verify(accessToken, process.env.ACCESS_TOKEN, async (err, user) => {
     if (err) {
-      if (!refreshToken) return null;
+      if (!refreshToken)
+        return res
+          .status(401)
+          .json({ message: "no valid refresh token provieded" });
 
       if (!(await RefreshToken.findOne({ refreshToken: refreshToken })))
-        return null;
+        return res.status(401).json({ message: "refresh token not valid" });
 
       jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, user) => {
-        if (err) return null;
+        if (err)
+          return res
+            .status(401)
+            .json({ message: "refresh token couldn't be verified" });
 
-        const { _id, username } = user;
-        const truncUser = { _id, username };
+        const newAccessToken = jwt.sign(
+          { id: user._id },
+          process.env.ACCESS_TOKEN,
+          {
+            expiresIn: "10m",
+          }
+        );
 
-        const newAccessToken = jwt.sign(truncUser, process.env.ACCESS_TOKEN, {
-          expiresIn: "10m",
-        });
-
-        res.status(401).json(newAccessToken);
+        res.accessToken = newAccessToken;
       });
-    } else {
-      req.user = user;
-      next();
     }
+    req.user = user;
+    next();
   });
 });
