@@ -6,9 +6,8 @@ const RefreshToken = require("./models/refreshToken");
 exports.verifyToken = asyncHandler(async (req, res, next) => {
   // Get auth header value
   const accessHeader = req.headers["authorization"];
-  const refreshHeader = req.headers["refresh"];
+  const refreshToken = req.headers["refresh"];
   const accessToken = accessHeader && accessHeader.split(" ")[1];
-  const refreshToken = refreshHeader && refreshHeader.split(" ")[1];
 
   if (!accessToken) return res.sendStatus(403);
 
@@ -17,7 +16,7 @@ exports.verifyToken = asyncHandler(async (req, res, next) => {
       if (!refreshToken)
         return res
           .status(401)
-          .json({ message: "no valid refresh token provieded" });
+          .json({ message: "no valid refresh token provided" });
 
       if (!(await RefreshToken.findOne({ refreshToken: refreshToken })))
         return res.status(401).json({ message: "refresh token not valid" });
