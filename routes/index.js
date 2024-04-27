@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("passport");
 
 const campaign_controller = require("../controllers/campaignController");
 const character_controller = require("../controllers/characterController");
@@ -14,11 +13,7 @@ const token_controller = require("../controllers/tokenRefreshController");
 
 const { verifyToken } = require("../verifyToken");
 
-router.post(
-  "/api/v1/login",
-  passport.authenticate("local"),
-  login_controller.login_user
-);
+router.post("/api/v1/login", login_controller.login_user);
 router.post("/api/v1/token", token_controller.refresh_token);
 router.post("/api/v1/signup", register_controller.signup_user);
 router.post("/api/v1/logout", logout_controller.log_out);

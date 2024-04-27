@@ -1,22 +1,24 @@
+let dotenv = require("dotenv").config();
 const User = require("./models/user");
 
-const LocalStrategy = require("passport-local").Strategy;
-const bcrypt = require("bcrypt");
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
+
+//const bcrypt = require("bcrypt");
+
+const opts = {
+  secretOrKey: process.env.JWT_SECRET || dotenv.JWT_SECRET,
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+};
 
 function initializePassport(passport) {
   passport.use(
-    new LocalStrategy(async (username, password, done) => {
+    new JwtStrategy(opts, async (payload, done) => {
       try {
-        const user = await User.findOne({ username: username });
-        if (!user) {
-          return done(null, false, { message: "Incorrect username" });
-        }
-        if (await bcrypt.compare(password, user.password)) {
-          return done(null, user);
-        }
-        return done(null, false, { message: "Incorrect password" });
-      } catch (err) {
-        return done(err);
+        const user = User.findById(payload.id);
+        if (user) return done(null, user);
+      } catch (error) {
+        return done(error);
       }
     })
   );
