@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const cloudinary = require("cloudinary").v2;
 
 const campaign_controller = require("../controllers/campaignController");
 const character_controller = require("../controllers/characterController");
@@ -12,6 +13,10 @@ const register_controller = require("../controllers/registerController");
 const token_controller = require("../controllers/tokenRefreshController");
 
 const { verifyToken } = require("../verifyToken");
+
+cloudinary.config({
+  secure: true,
+});
 
 router.post("/api/v1/login", login_controller.login_user);
 router.post("/api/v1/token", token_controller.refresh_token);

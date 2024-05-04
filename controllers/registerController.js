@@ -32,7 +32,11 @@ exports.signup_user = [
       password: hashedPassword,
     });
 
-    await user.save();
-    res.status(200).json({ user });
+    try {
+      await user.save();
+      res.status(200).json({ user });
+    } catch (error) {
+      res.status(400).json({ message: "Username already taken" });
+    }
   }),
 ];
