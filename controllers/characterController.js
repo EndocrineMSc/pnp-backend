@@ -1,4 +1,5 @@
 const GameCharacter = require("../models/character");
+const Location = require("../models/location");
 
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
@@ -31,22 +32,26 @@ exports.character_create_post = [
     .escape()
     .withMessage("First name must be specified"),
   body("occupation").trim().escape(),
-  body("location").trim().escape(),
   body("location_path").trim().escape(),
   body("short_despcription").trim().escape(),
   body("long_description").trim().escape(),
 
   asyncHandler(async (req, res) => {
     const errors = validationResult(req);
+    let newLocation = null;
 
     if (!errors.isEmpty()) {
       res.status(403).json(errors.array());
     }
 
+    if (req.body.location) {
+      newLocation = Location.findById(req.body.location);
+    }
+
     const character = new GameCharacter({
       name: req.body.name,
       occupation: req.body.occupation,
-      location: req.body.location ? req.body.location : null,
+      location: newLocation,
       location_path: req.body.location_path,
       short_description: req.body.short_description,
       long_description: req.body.long_description,
@@ -78,15 +83,22 @@ exports.character_update_post = [
 
   asyncHandler(async (req, res) => {
     const errors = validationResult(req);
+    let newLocation = null;
 
     if (!errors.isEmpty()) {
       res.status(403).json(errors.array());
     }
 
+    console.log(req.body.location);
+
+    if (req.body.location) {
+      newLocation = await Location.findById(req.body.location);
+    }
+
     const character = new GameCharacter({
       name: req.body.name,
       occupation: req.body.occupation,
-      location: req.body.location ? req.body.location : null,
+      location: newLocation,
       location_path: req.body.location_path,
       short_description: req.body.short_description,
       long_description: req.body.long_description,
@@ -100,7 +112,15 @@ exports.character_update_post = [
       character,
       {}
     );
-    res.status(200).json(updatedCharacter);
+
+    const newCharacter = await GameCharacter.findById(req.params.id)
+      .populate("location")
+      .exec();
+
+    console.log(updatedCharacter);
+    console.log(newCharacter);
+
+    res.status(200).json(newCharacter);
   }),
 ];
 
