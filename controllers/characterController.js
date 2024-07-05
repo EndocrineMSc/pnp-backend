@@ -32,7 +32,6 @@ exports.character_create_post = [
     .escape()
     .withMessage("First name must be specified"),
   body("occupation").trim().escape(),
-  body("location_path").trim().escape(),
   body("short_despcription").trim().escape(),
   body("long_description").trim().escape(),
 
@@ -44,15 +43,17 @@ exports.character_create_post = [
       res.status(403).json(errors.array());
     }
 
-    if (req.body.location) {
-      newLocation = Location.findById(req.body.location);
+    if (req.body.location && req.body.location !== "n.a.") {
+      newLocation = await Location.findById(req.body.location).exec();
+      if (newLocation === null) {
+        console.warn("location not found");
+      }
     }
 
     const character = new GameCharacter({
       name: req.body.name,
       occupation: req.body.occupation,
       location: newLocation,
-      location_path: req.body.location_path,
       short_description: req.body.short_description,
       long_description: req.body.long_description,
       campaign_id: req.params.campaignId,
@@ -60,6 +61,7 @@ exports.character_create_post = [
     });
 
     try {
+      console.log(character);
       await character.save();
       res.status(200).json(character);
     } catch (err) {
@@ -76,8 +78,6 @@ exports.character_update_post = [
     .escape()
     .withMessage("First name must be specified"),
   body("occupation").trim().escape(),
-  body("location").trim().escape(),
-  body("location_path").trim().escape(),
   body("short_despcription").trim().escape(),
   body("long_description").trim().escape(),
 
@@ -91,15 +91,14 @@ exports.character_update_post = [
 
     console.log(req.body.location);
 
-    if (req.body.location) {
-      newLocation = await Location.findById(req.body.location);
+    if (req.body.location && req.body.location !== "n.a.") {
+      newLocation = await Location.findById(req.body.location).exec();
     }
 
     const character = new GameCharacter({
       name: req.body.name,
       occupation: req.body.occupation,
       location: newLocation,
-      location_path: req.body.location_path,
       short_description: req.body.short_description,
       long_description: req.body.long_description,
       campaign_id: req.params.campaignId,
